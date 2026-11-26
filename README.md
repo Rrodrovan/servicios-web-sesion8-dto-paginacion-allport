@@ -1,5 +1,7 @@
 # gestion-academica-allport-web
 
+> **Sesión 8 · DTOs y paginación:** el backend Spring Boot está en [`backend/`](backend/README.md) (DTO de entrada validado en `POST /api/v1/resultados` y paginación con `Pageable` en el GET, más la colección de Postman y el análisis).
+
 Frontend React + TypeScript + Vite del proyecto de **Servicios Web** (Sesión 12 — Consumo de API REST desde React) para el **Test de Valores de Allport**.
 
 ## Ejecutar

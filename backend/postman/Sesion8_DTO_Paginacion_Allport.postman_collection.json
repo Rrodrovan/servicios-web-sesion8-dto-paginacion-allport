@@ -1,0 +1,432 @@
+{
+  "info": {
+    "name": "Sesión 8 - DTOs y paginación - Test de Valores de Allport",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Actividad 3 de la guía de la Sesión 8. Levantar la API en el puerto 9090 antes de ejecutar."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:9090"
+    }
+  ],
+  "item": [
+    {
+      "name": "Parte I - DTO de entrada (POST)",
+      "item": [
+        {
+          "name": "1. POST con datos válidos",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/resultados",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "resultados"
+              ]
+            },
+            "description": "Crea el registro mediante ResultadoTestRequest. Espera 201 Created.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"carnet\": \"20249999\",\n  \"nombreEstudiante\": \"Gabriela Núñez\",\n  \"carrera\": \"Psicología\",\n  \"teorico\": 38,\n  \"economico\": 32,\n  \"estetico\": 40,\n  \"social\": 52,\n  \"politico\": 34,\n  \"religioso\": 44\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('201 Created', () => pm.response.to.have.status(201));",
+                  "pm.test('El sistema calcula valorDominante', () => pm.expect(pm.response.json().valorDominante).to.eql('SOC'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "2. POST con datos inválidos",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/resultados",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "resultados"
+              ]
+            },
+            "description": "Carnet con letras, nombre vacío y puntaje negativo. Espera 400 con el detalle por campo.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"carnet\": \"ab\",\n  \"nombreEstudiante\": \"\",\n  \"carrera\": \"Psicología\",\n  \"teorico\": -5,\n  \"economico\": 32,\n  \"estetico\": 40,\n  \"social\": 52,\n  \"politico\": 34,\n  \"religioso\": 44\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('400 Bad Request', () => pm.response.to.have.status(400));",
+                  "pm.test('Informa los campos con error', () => pm.expect(pm.response.json().errores).to.have.keys('carnet','nombreEstudiante','teorico'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "3. POST con suma distinta de 240",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/resultados",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "resultados"
+              ]
+            },
+            "description": "Regla del dominio: los seis puntajes deben sumar 240. Espera 400.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"carnet\": \"20248888\",\n  \"nombreEstudiante\": \"Luis Pérez\",\n  \"carrera\": \"Derecho\",\n  \"teorico\": 40,\n  \"economico\": 40,\n  \"estetico\": 40,\n  \"social\": 40,\n  \"politico\": 40,\n  \"religioso\": 50\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('400 Bad Request', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "4. POST con carnet repetido",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/resultados",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "resultados"
+              ]
+            },
+            "description": "Ejecutar después de la petición 1. Espera 409 Conflict.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"carnet\": \"20249999\",\n  \"nombreEstudiante\": \"Gabriela Núñez\",\n  \"carrera\": \"Psicología\",\n  \"teorico\": 38,\n  \"economico\": 32,\n  \"estetico\": 40,\n  \"social\": 52,\n  \"politico\": 34,\n  \"religioso\": 44\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('409 Conflict', () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Parte II - Paginación (GET)",
+      "item": [
+        {
+          "name": "5. GET sin parámetros (valores por defecto)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/resultados",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "resultados"
+              ]
+            },
+            "description": "Página 0 con 5 registros, ordenados por id."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Página 0, tamaño 5', () => { const j = pm.response.json(); pm.expect(j.number).to.eql(0); pm.expect(j.size).to.eql(5); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "6. GET página 0 (size=5)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/resultados?page=0&size=5",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "resultados"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "5"
+                }
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Página 0', () => pm.expect(pm.response.json().number).to.eql(0));",
+                  "pm.test('Máximo 5 elementos', () => pm.expect(pm.response.json().content.length).to.be.at.most(5));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "7. GET página 1 (size=5)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/resultados?page=1&size=5",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "resultados"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "size",
+                  "value": "5"
+                }
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Página 1', () => pm.expect(pm.response.json().number).to.eql(1));",
+                  "pm.test('Máximo 5 elementos', () => pm.expect(pm.response.json().content.length).to.be.at.most(5));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "8. GET página 0 con otro tamaño (size=3)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/resultados?page=0&size=3",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "resultados"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "3"
+                }
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Tamaño 3', () => pm.expect(pm.response.json().content.length).to.be.at.most(3));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "9. GET página 0 con size=10 y orden",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/resultados?page=0&size=10&sort=carrera,asc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "resultados"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                },
+                {
+                  "key": "sort",
+                  "value": "carrera,asc"
+                }
+              ]
+            },
+            "description": ""
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Tamaño 10', () => pm.expect(pm.response.json().size).to.eql(10));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "10. GET filtrado por carrera",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/resultados?carrera=psico&page=0&size=5",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "resultados"
+              ],
+              "query": [
+                {
+                  "key": "carrera",
+                  "value": "psico"
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "5"
+                }
+              ]
+            },
+            "description": ""
+          }
+        }
+      ]
+    }
+  ]
+}
