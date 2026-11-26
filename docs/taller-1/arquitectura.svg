@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1040" viewBox="0 0 1500 1040" font-family="DejaVu Sans, Arial, sans-serif">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#334155"/></marker>
+<marker id="ard" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b45309"/></marker></defs>
+<rect width="1500" height="1040" fill="#ffffff"/>
+<text x="750" y="48" text-anchor="middle" font-size="26" font-weight="bold" fill="#0f172a">Arquitectura — Test de Valores de Allport (Servicios Web)</text>
+<text x="750" y="78" text-anchor="middle" font-size="15" fill="#475569">Cliente → API REST en capas (Spring Boot) → PostgreSQL · rama taller-1</text>
+<text x="200" y="128" text-anchor="middle" font-size="13" fill="#64748b">CLIENTES</text>
+<text x="1320" y="128" text-anchor="middle" font-size="13" fill="#64748b">PERSISTENCIA</text>
+<rect x="40" y="150" width="320" height="130" rx="12" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+<text x="200.0" y="194.5" text-anchor="middle" font-size="16" font-weight="bold" fill="#0f172a">Cliente web (SPA)</text>
+<text x="200.0" y="213.5" text-anchor="middle" font-size="13" fill="#334155">React 19 + TypeScript · Vite</text>
+<text x="200.0" y="232.5" text-anchor="middle" font-size="13" fill="#334155">http://localhost:5173</text>
+<text x="200.0" y="251.5" text-anchor="middle" font-size="13" fill="#334155">Axios · proxy /api → :9090</text>
+<rect x="40" y="320" width="320" height="130" rx="12" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+<text x="200.0" y="364.5" text-anchor="middle" font-size="16" font-weight="bold" fill="#0f172a">Postman</text>
+<text x="200.0" y="383.5" text-anchor="middle" font-size="13" fill="#334155">Colección Taller 1 (Sesión 4)</text>
+<text x="200.0" y="402.5" text-anchor="middle" font-size="13" fill="#334155">201 · 400 · 200 · 204 · 404</text>
+<text x="200.0" y="421.5" text-anchor="middle" font-size="13" fill="#334155">sin navegador: no aplica CORS</text>
+<rect x="450" y="110" width="660" height="640" rx="16" fill="#f8fafc" stroke="#0f766e" stroke-width="2.5"/>
+<text x="780" y="138" text-anchor="middle" font-size="15" fill="#0f766e">API REST · Spring Boot 3.5 · Java 21 · http://localhost:9090</text>
+<rect x="480" y="160" width="410" height="80" rx="12" fill="#ffffff" stroke="#0f766e" stroke-width="2"/>
+<text x="685.0" y="198.5" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">Entrada HTTP · CorsConfig</text>
+<text x="685.0" y="216.5" text-anchor="middle" font-size="12" fill="#334155">DispatcherServlet · origen permitido :5173 · JSON</text>
+<rect x="480" y="270" width="410" height="90" rx="12" fill="#ffffff" stroke="#0f766e" stroke-width="2"/>
+<text x="685.0" y="304.5" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">Controladores (@RestController)</text>
+<text x="685.0" y="322.5" text-anchor="middle" font-size="12" fill="#334155">/api/v1/resultados: GET · POST · PUT · DELETE</text>
+<text x="685.0" y="340.5" text-anchor="middle" font-size="12" fill="#334155">/api/v1/valores: GET (lista y por id)</text>
+<rect x="480" y="390" width="410" height="90" rx="12" fill="#ffffff" stroke="#0f766e" stroke-width="2"/>
+<text x="685.0" y="424.5" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">DTO + Bean Validation (@Valid)</text>
+<text x="685.0" y="442.5" text-anchor="middle" font-size="12" fill="#334155">ResultadoTestRequest: @NotBlank @Pattern @Size</text>
+<text x="685.0" y="460.5" text-anchor="middle" font-size="12" fill="#334155">@Min/@Max 0–80 · @AssertTrue suma = 240</text>
+<rect x="480" y="510" width="410" height="90" rx="12" fill="#ffffff" stroke="#0f766e" stroke-width="2"/>
+<text x="685.0" y="544.5" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">Servicios (@Service)</text>
+<text x="685.0" y="562.5" text-anchor="middle" font-size="12" fill="#334155">valor dominante · carnet único</text>
+<text x="685.0" y="580.5" text-anchor="middle" font-size="12" fill="#334155">DTO ↔ entidad · @Transactional</text>
+<rect x="480" y="630" width="410" height="80" rx="12" fill="#ffffff" stroke="#0f766e" stroke-width="2"/>
+<text x="685.0" y="668.5" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">Repositorios (Spring Data JPA)</text>
+<text x="685.0" y="686.5" text-anchor="middle" font-size="12" fill="#334155">JpaRepository · Pageable (page, size, sort)</text>
+<line x1="685" y1="244" x2="685" y2="266" stroke="#334155" stroke-width="2" marker-end="url(#ar)"/>
+<line x1="685" y1="364" x2="685" y2="386" stroke="#334155" stroke-width="2" marker-end="url(#ar)"/>
+<line x1="685" y1="484" x2="685" y2="506" stroke="#334155" stroke-width="2" marker-end="url(#ar)"/>
+<line x1="685" y1="604" x2="685" y2="626" stroke="#334155" stroke-width="2" marker-end="url(#ar)"/>
+<rect x="930" y="270" width="160" height="330" rx="12" fill="#fffbeb" stroke="#b45309" stroke-width="2"/>
+<text x="1010.0" y="352.0" text-anchor="middle" font-size="14" font-weight="bold" fill="#0f172a">@RestController-</text>
+<text x="1010.0" y="370.0" text-anchor="middle" font-size="12" fill="#334155">Advice</text>
+<text x="1010.0" y="388.0" text-anchor="middle" font-size="12" fill="#334155"></text>
+<text x="1010.0" y="406.0" text-anchor="middle" font-size="12" fill="#334155">GlobalException-</text>
+<text x="1010.0" y="424.0" text-anchor="middle" font-size="12" fill="#334155">Handler</text>
+<text x="1010.0" y="442.0" text-anchor="middle" font-size="12" fill="#334155"></text>
+<text x="1010.0" y="460.0" text-anchor="middle" font-size="12" fill="#334155">400 validación</text>
+<text x="1010.0" y="478.0" text-anchor="middle" font-size="12" fill="#334155">404 no existe</text>
+<text x="1010.0" y="496.0" text-anchor="middle" font-size="12" fill="#334155">409 duplicado</text>
+<text x="1010.0" y="514.0" text-anchor="middle" font-size="12" fill="#334155">405 · 500</text>
+<text x="1010.0" y="532.0" text-anchor="middle" font-size="12" fill="#334155">JSON limpio</text>
+<line x1="892" y1="315" x2="926" y2="315" stroke="#b45309" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#ard)"/>
+<line x1="892" y1="435" x2="926" y2="435" stroke="#b45309" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#ard)"/>
+<line x1="892" y1="555" x2="926" y2="555" stroke="#b45309" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#ard)"/>
+<line x1="362" y1="200" x2="476" y2="200" stroke="#334155" stroke-width="2" marker-end="url(#ar)" marker-start="url(#ar)"/>
+<text x="419" y="188" text-anchor="middle" font-size="11" fill="#334155">HTTP+JSON</text>
+<line x1="362" y1="385" x2="476" y2="315" stroke="#334155" stroke-width="2" marker-end="url(#ar)" marker-start="url(#ar)"/>
+<text x="405" y="330" text-anchor="middle" font-size="11" fill="#334155">HTTP</text>
+<rect x="1190" y="560" width="260" height="190" rx="12" fill="#ecfdf5" stroke="#15803d" stroke-width="2"/>
+<text x="1320.0" y="625.0" text-anchor="middle" font-size="16" font-weight="bold" fill="#0f172a">PostgreSQL</text>
+<text x="1320.0" y="644.0" text-anchor="middle" font-size="13" fill="#334155">allport_db · puerto 5432</text>
+<text x="1320.0" y="663.0" text-anchor="middle" font-size="13" fill="#334155"></text>
+<text x="1320.0" y="682.0" text-anchor="middle" font-size="13" fill="#334155">tabla resultados_test</text>
+<text x="1320.0" y="701.0" text-anchor="middle" font-size="13" fill="#334155">tabla valores</text>
+<line x1="892" y1="670" x2="1186" y2="670" stroke="#334155" stroke-width="2" marker-end="url(#ar)" marker-start="url(#ar)"/>
+<text x="1000" y="690" text-anchor="middle" font-size="12" fill="#334155">JDBC · Hibernate</text>
+<rect x="1190" y="300" width="260" height="170" rx="12" fill="#f1f5f9" stroke="#64748b" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="1320.0" y="356.0" text-anchor="middle" font-size="14" font-weight="bold" fill="#0f172a">Datos iniciales</text>
+<text x="1320.0" y="374.0" text-anchor="middle" font-size="12" fill="#334155">CommandLineRunner</text>
+<text x="1320.0" y="392.0" text-anchor="middle" font-size="12" fill="#334155">6 valores de Allport</text>
+<text x="1320.0" y="410.0" text-anchor="middle" font-size="12" fill="#334155">resultados de ejemplo</text>
+<text x="1320.0" y="428.0" text-anchor="middle" font-size="12" fill="#334155">al arrancar la API</text>
+
+<line x1="40" y1="530" x2="90" y2="530" stroke="#334155" stroke-width="2" marker-end="url(#ar)"/>
+<text x="225" y="535" text-anchor="middle" font-size="12" fill="#334155">petición / respuesta</text>
+<line x1="40" y1="565" x2="90" y2="565" stroke="#b45309" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#ard)"/>
+<text x="232" y="570" text-anchor="middle" font-size="12" fill="#334155">excepción → respuesta de error</text>
+<rect x="40" y="800" width="1420" height="200" rx="16" fill="#fafafa" stroke="#94a3b8" stroke-width="2"/>
+<text x="750" y="830" text-anchor="middle" font-size="14" fill="#475569">ENTORNO DE DESARROLLO (Windows)</text>
+<rect x="65" y="860" width="205" height="110" rx="12" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+<text x="167.5" y="913.0" text-anchor="middle" font-size="14" font-weight="bold" fill="#0f172a">JDK 21</text>
+<text x="167.5" y="931.0" text-anchor="middle" font-size="12" fill="#334155">lenguaje Java 21</text>
+<rect x="295" y="860" width="205" height="110" rx="12" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+<text x="397.5" y="904.0" text-anchor="middle" font-size="14" font-weight="bold" fill="#0f172a">Maven</text>
+<text x="397.5" y="922.0" text-anchor="middle" font-size="12" fill="#334155">spring-boot-starter</text>
+<text x="397.5" y="940.0" text-anchor="middle" font-size="12" fill="#334155">web · data-jpa · validation</text>
+<rect x="525" y="860" width="205" height="110" rx="12" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+<text x="627.5" y="904.0" text-anchor="middle" font-size="14" font-weight="bold" fill="#0f172a">IntelliJ IDEA</text>
+<text x="627.5" y="922.0" text-anchor="middle" font-size="12" fill="#334155">ejecución y pruebas</text>
+<text x="627.5" y="940.0" text-anchor="middle" font-size="12" fill="#334155">AllportApiApplication</text>
+<rect x="755" y="860" width="205" height="110" rx="12" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+<text x="857.5" y="904.0" text-anchor="middle" font-size="14" font-weight="bold" fill="#0f172a">PostgreSQL + pgAdmin</text>
+<text x="857.5" y="922.0" text-anchor="middle" font-size="12" fill="#334155">base allport_db</text>
+<text x="857.5" y="940.0" text-anchor="middle" font-size="12" fill="#334155">usuario postgres</text>
+<rect x="985" y="860" width="205" height="110" rx="12" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+<text x="1087.5" y="904.0" text-anchor="middle" font-size="14" font-weight="bold" fill="#0f172a">Node.js + pnpm</text>
+<text x="1087.5" y="922.0" text-anchor="middle" font-size="12" fill="#334155">Vite :5173</text>
+<text x="1087.5" y="940.0" text-anchor="middle" font-size="12" fill="#334155">frontend React</text>
+<rect x="1215" y="860" width="205" height="110" rx="12" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+<text x="1317.5" y="904.0" text-anchor="middle" font-size="14" font-weight="bold" fill="#0f172a">Postman · Git</text>
+<text x="1317.5" y="922.0" text-anchor="middle" font-size="12" fill="#334155">pruebas de endpoints</text>
+<text x="1317.5" y="940.0" text-anchor="middle" font-size="12" fill="#334155">GitHub: rama taller-1</text>
+</svg>

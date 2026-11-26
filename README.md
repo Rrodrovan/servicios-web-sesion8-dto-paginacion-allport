@@ -1,5 +1,7 @@
 # gestion-academica-allport-web
 
+> **Taller #1 (Sesión 4) · rama `taller-1`:** propuesta de arquitectura, configuración del entorno y checklist de Postman en [`docs/taller-1/`](docs/taller-1/README.md).
+
 > **Sesión 8 · DTOs y paginación:** el backend Spring Boot está en [`backend/`](backend/README.md) (DTO de entrada validado en `POST /api/v1/resultados` y paginación con `Pageable` en el GET, más la colección de Postman y el análisis).
 
 Frontend React + TypeScript + Vite del proyecto de **Servicios Web** (Sesión 12 — Consumo de API REST desde React) para el **Test de Valores de Allport**.
