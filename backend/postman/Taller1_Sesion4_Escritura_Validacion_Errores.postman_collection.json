@@ -1,0 +1,335 @@
+{
+  "info": {
+    "name": "Taller 1 - Sesión 4: escritura, validación y errores (Test de Valores de Allport)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Checklist de la Sesión 4 sobre el proyecto: POST válido → 201 + Location, POST inválido → 400 por campo, PUT → 200, DELETE → 204 y GET de id inexistente → 404 con JSON limpio. Ejecutar en orden con el Collection Runner y la API levantada en el puerto 9090."
+  },
+  "item": [
+    {
+      "name": "1. POST válido → 201 + Location",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/resultados",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "resultados"
+          ]
+        },
+        "description": "Crea un resultado nuevo con el DTO validado. Espera 201 Created y la cabecera Location con la URI del recurso; guarda el id para los pasos siguientes.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"carnet\": \"20261001\",\n  \"nombreEstudiante\": \"Mariela Torres\",\n  \"carrera\": \"Ingeniería en Sistemas\",\n  \"teorico\": 48,\n  \"economico\": 42,\n  \"estetico\": 30,\n  \"social\": 36,\n  \"politico\": 44,\n  \"religioso\": 40\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('201 Created', () => pm.response.to.have.status(201));",
+              "pm.test('Cabecera Location apunta al recurso', () => pm.expect(pm.response.headers.get('Location')).to.match(/\\/api\\/v1\\/resultados\\/\\d+$/));",
+              "const r = pm.response.json();",
+              "pm.test('El sistema calcula valorDominante y fechaAplicacion', () => { pm.expect(r.valorDominante).to.eql('TEO'); pm.expect(r.fechaAplicacion).to.be.a('string'); });",
+              "pm.collectionVariables.set('id', r.id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. POST inválido → 400 con mensajes por campo",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/resultados",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "resultados"
+          ]
+        },
+        "description": "Carnet con letras, nombre vacío, carrera corta y un puntaje mayor que 80. Espera 400 con el objeto errores; el controlador nunca se ejecuta.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"carnet\": \"12ab\",\n  \"nombreEstudiante\": \"\",\n  \"carrera\": \"IS\",\n  \"teorico\": 95,\n  \"economico\": 42,\n  \"estetico\": 30,\n  \"social\": 36,\n  \"politico\": 44,\n  \"religioso\": 40\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('400 Bad Request', () => pm.response.to.have.status(400));",
+              "const e = pm.response.json().errores;",
+              "pm.test('Un mensaje por cada campo inválido', () => pm.expect(e).to.include.keys('carnet','nombreEstudiante','carrera','teorico'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. PUT sobre id existente → 200",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/resultados/{{id}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "resultados",
+            "{{id}}"
+          ]
+        },
+        "description": "Reemplaza los datos del resultado creado en el paso 1 (nombre, carrera y puntajes). Espera 200 OK y el valor dominante recalculado.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"carnet\": \"20261001\",\n  \"nombreEstudiante\": \"Mariela Torres Ruiz\",\n  \"carrera\": \"Psicología\",\n  \"teorico\": 34,\n  \"economico\": 30,\n  \"estetico\": 38,\n  \"social\": 56,\n  \"politico\": 40,\n  \"religioso\": 42\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200 OK', () => pm.response.to.have.status(200));",
+              "const r = pm.response.json();",
+              "pm.test('Se conserva el id y se actualizan los datos', () => { pm.expect(r.id).to.eql(Number(pm.collectionVariables.get('id'))); pm.expect(r.carrera).to.eql('Psicología'); pm.expect(r.valorDominante).to.eql('SOC'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. GET del recurso actualizado → 200",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/resultados/{{id}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "resultados",
+            "{{id}}"
+          ]
+        },
+        "description": "Comprueba que el cambio del PUT quedó guardado."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200 OK', () => pm.response.to.have.status(200));",
+              "pm.test('Datos actualizados', () => pm.expect(pm.response.json().nombreEstudiante).to.eql('Mariela Torres Ruiz'));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. DELETE → 204",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/resultados/{{id}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "resultados",
+            "{{id}}"
+          ]
+        },
+        "description": "Elimina el resultado. Espera 204 No Content con el cuerpo vacío."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('204 No Content', () => pm.response.to.have.status(204));",
+              "pm.test('Cuerpo vacío', () => pm.expect(pm.response.text()).to.eql(''));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. GET de id inexistente → 404 con JSON limpio",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/resultados/{{id}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "resultados",
+            "{{id}}"
+          ]
+        },
+        "description": "El recurso ya fue eliminado. Espera 404 con status, mensaje y timestamp, sin stack trace."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('404 Not Found', () => pm.response.to.have.status(404));",
+              "const r = pm.response.json();",
+              "pm.test('JSON de error estable', () => { pm.expect(r).to.include.keys('timestamp','status','error','message','path'); pm.expect(r.status).to.eql(404); });",
+              "pm.test('No expone detalles internos', () => pm.expect(pm.response.text()).to.not.match(/Exception|at edu\\.|SQL/));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. PUT sobre id inexistente → 404",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/resultados/999999",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "resultados",
+            "999999"
+          ]
+        },
+        "description": "Actualizar un recurso que no existe responde 404 desde el @RestControllerAdvice.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"carnet\": \"20261001\",\n  \"nombreEstudiante\": \"Mariela Torres\",\n  \"carrera\": \"Ingeniería en Sistemas\",\n  \"teorico\": 48,\n  \"economico\": 42,\n  \"estetico\": 30,\n  \"social\": 36,\n  \"politico\": 44,\n  \"religioso\": 40\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('404 Not Found', () => pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. GET con id mal formado → 400",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/resultados/abc",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "resultados",
+            "abc"
+          ]
+        },
+        "description": "Variable de ruta que no es número. Espera 400 en el mismo formato de error."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('400 Bad Request', () => pm.response.to.have.status(400));",
+              "pm.test('Mensaje claro', () => pm.expect(pm.response.json().message).to.include('id'));"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:9090"
+    },
+    {
+      "key": "id",
+      "value": ""
+    }
+  ]
+}

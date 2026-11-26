@@ -48,8 +48,27 @@ public class ResultadoTestService {
 
     @Transactional(readOnly = true)
     public ResultadoTestResponse obtener(Long id) {
+        return aResponse(buscar(id));
+    }
+
+    @Transactional
+    public ResultadoTestResponse actualizar(Long id, ResultadoTestRequest request) {
+        ResultadoTest entidad = buscar(id);
+        String carnet = request.carnet().trim();
+        if (repository.existsByCarnetAndIdNot(carnet, id)) {
+            throw new RecursoDuplicadoException("El carnet " + carnet + " ya pertenece a otro resultado");
+        }
+        copiarDatos(request, entidad);
+        return aResponse(repository.save(entidad));
+    }
+
+    @Transactional
+    public void eliminar(Long id) {
+        repository.delete(buscar(id));
+    }
+
+    private ResultadoTest buscar(Long id) {
         return repository.findById(id)
-                .map(this::aResponse)
                 .orElseThrow(() -> new RecursoNoEncontradoException("No existe un resultado con id " + id));
     }
 
@@ -57,6 +76,12 @@ public class ResultadoTestService {
 
     private ResultadoTest aEntidad(ResultadoTestRequest r) {
         ResultadoTest e = new ResultadoTest();
+        copiarDatos(r, e);
+        return e;
+    }
+
+    /** Copia los datos del DTO sobre la entidad; id y fechaAplicacion no cambian. */
+    private void copiarDatos(ResultadoTestRequest r, ResultadoTest e) {
         e.setCarnet(r.carnet().trim());
         e.setNombreEstudiante(r.nombreEstudiante().trim());
         e.setCarrera(r.carrera().trim());
@@ -67,7 +92,6 @@ public class ResultadoTestService {
         e.setPolitico(r.politico());
         e.setReligioso(r.religioso());
         e.setValorDominante(calcularValorDominante(r));
-        return e;
     }
 
     private ResultadoTestResponse aResponse(ResultadoTest e) {

@@ -9,9 +9,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -56,5 +58,23 @@ public class ResultadoTestController {
     @GetMapping("/{id}")
     public ResultadoTestResponse obtener(@PathVariable Long id) {
         return service.obtener(id);
+    }
+
+    /**
+     * Actualización completa (idempotente): reemplaza los datos del resultado {id}
+     * con el mismo DTO validado del POST. 200 OK con el recurso actualizado,
+     * 404 si no existe, 400 si el payload es inválido y 409 si el carnet ya es de otro registro.
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<ResultadoTestResponse> actualizar(@PathVariable Long id,
+                                                            @Valid @RequestBody ResultadoTestRequest request) {
+        return ResponseEntity.ok(service.actualizar(id, request));
+    }
+
+    /** Eliminación: 204 No Content con cuerpo vacío; 404 si el id no existe. */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        service.eliminar(id);
+        return ResponseEntity.noContent().build();
     }
 }
