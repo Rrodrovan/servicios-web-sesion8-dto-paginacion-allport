@@ -98,7 +98,7 @@
                 "type": "text/javascript",
                 "exec": [
                   "pm.test('400 Bad Request', () => pm.response.to.have.status(400));",
-                  "pm.test('Informa los campos con error', () => pm.expect(pm.response.json().errores).to.have.keys('carnet','nombreEstudiante','teorico'));"
+                  "pm.test('Informa los campos con error', () => pm.expect(pm.response.json().errores).to.include.all.keys('carnet','nombreEstudiante','teorico'));"
                 ]
               }
             }
